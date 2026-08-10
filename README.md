@@ -1,1 +1,1 @@
-# A-Controllable-Ink-Painting-System-via-Attention-Distillation
+# A Controllable Ink Painting System via Attention Distillation
