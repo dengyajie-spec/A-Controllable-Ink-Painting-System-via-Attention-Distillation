@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注意力蒸馏写意水墨风格迁移 / Attention Distillation Ink Transfer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f5f4ef;
+            --primary-color: #1a1a1a;
+            --accent-color: #8c1c1c; /* 印泥朱红 */
+            --border-color: #d3cfc5;
+        }
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            border-bottom: 2px solid var(--primary-color);
+            padding: 25px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+            width: calc(100% - 40px);
+        }
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .lang-btn {
+            background: none;
+            border: 1px solid var(--primary-color);
+            padding: 5px 14px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .lang-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+        main {
+            max-width: 1300px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 35px;
+            width: calc(100% - 40px);
+            flex-grow: 1;
+        }
+        @media (max-width: 1000px) {
+            main { grid-template-columns: 1fr; }
+        }
+        .card {
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 2px;
+            margin-bottom: 25px;
+        }
+        .card-title {
+            font-size: 1.15rem;
+            border-bottom: 1px solid var(--primary-color);
+            padding-bottom: 8px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .step-badge {
+            font-size: 0.75rem;
+            border: 1.5px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 1px 6px;
+            font-weight: 600;
+        }
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .upload-box {
+            border: 1px dashed var(--border-color);
+            padding: 20px 10px;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.7);
+            position: relative;
+            transition: border-color 0.2s ease;
+        }
+        .upload-box:hover {
+            border-color: var(--primary-color);
+        }
+        .upload-box input { display: none; }
+        .upload-box span {
+            font-size: 0.85rem;
+            color: #555;
+        }
+        .upload-box img {
+            max-width: 100%;
+            max-height: 120px;
+            display: none;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .slider-group {
+            margin-bottom: 20px;
+        }
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        input[type="range"] {
+            flex-grow: 1;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+        .slider-val {
+            font-family: monospace;
+            min-width: 30px;
+            text-align: right;
+            font-size: 0.85rem;
+        }
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 0.95rem;
+            font-family: inherit;
+            cursor: pointer;
+            letter-spacing: 2px;
+            transition: 0.2s ease;
+            font-weight: 600;
+        }
+        .btn-submit:hover {
+            background-color: var(--accent-color);
+        }
+        .canvas-area {
+            border: 1px dashed var(--border-color);
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            position: relative;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        #resultImg, #refineImg {
+            max-width: 100%;
+            max-height: 460px;
+            display: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+        .loading-ring {
+            display: none;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--accent-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .import-link {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 data-zh="注意力蒸馏写意水墨风格迁移与精修台" data-en="ZenInk Studio: Stylization & Precise Redraw">注意力蒸馏写意水墨风格迁移与精修台</h1>
+        <button class="lang-btn" onclick="toggleLanguage()">English</button>
+    </header>
+
+    <main>
+        <!-- 左侧：双功能工作台 -->
+        <div style="display: flex; flex-direction: column;">
+            
+            <!-- 工作台 A：写意水墨一键生成 -->
+            <section class="card">
+                <div class="card-title">
+                    <span data-zh="水墨特征优化迁移" data-en="Ink Transfer Console">水墨特征优化迁移</span>
+                    <span class="step-badge">Stage 1 & 2</span>
+                </div>
+                <form id="renderForm">
+                    <div class="upload-grid">
+                        <!-- 内容图 -->
+                        <div class="upload-box" id="content_box" onclick="document.getElementById('content_img').click()">
+                            <span data-zh="上传内容画骨图" data-en="Content Image">上传内容画骨图</span>
+                            <input type="file" id="content_img" name="content_img" accept="image/*" required>
+                            <img id="content_preview">
+                        </div>
+                        <!-- 风格图 -->
+                        <div class="upload-box" id="style_box" onclick="document.getElementById('style_img').click()">
+                            <span data-zh="上传水墨风格图" data-en="Style Image">上传水墨风格图</span>
+                            <input type="file" id="style_img" name="style_img" accept="image/*" required>
+                            <img id="style_preview">
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span data-zh="泼墨迭代步数" data-en="Style Optimization Steps">泼墨迭代步数 (Iterations)</span>
+                            <span class="slider-val">200</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" name="iters" min="50" max="300" step="10" value="200">
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span data-zh="内容权重" data-en="Content Weight">内容权重 (Content Weight)</span>
+                            <span class="slider-val">0.25</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" name="weight" min="0.05" max="0.8" step="0.05" value="0.25">
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span data-zh="潜在运笔步长" data-en="Latent Stroke Pace (LR)">潜在运笔步长 (Learning Rate)</span>
+                            <span class="slider-val">0.05</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" name="lr" min="0.01" max="0.10" step="0.01" value="0.05">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="submitBtn" data-zh="落笔生成水墨大作" data-en="Execute Ink Rendering">落笔生成水墨大作</button>
+                </form>
+            </section>
+
+            <!-- 工作台 B：水墨锁形精准精修台 -->
+            <section class="card">
+                <div class="card-title">
+                    <span data-zh="水墨锁形精修重绘" data-en="Ink Precise Redraw">水墨锁形精修重绘</span>
+                    <span class="step-badge">Stage 3</span>
+                </div>
+                <form id="refineForm">
+                    <!-- 支持传入上阶段结果，或手动上传全新底图 -->
+                    <div class="upload-grid" style="grid-template-columns: 1fr;">
+                        <div class="upload-box" id="ref_box" onclick="document.getElementById('refine_img').click()">
+                            <span data-zh="上传精修底图 (或使用下方一键导入)" data-en="Upload Refinement Base (or Import below)">上传精修底图 (或使用下方一键导入)</span>
+                            <input type="file" id="refine_img" name="refine_img" accept="image/*">
+                            <img id="refine_preview">
+                        </div>
+                    </div>
+
+                    <div class="flex-row" style="margin-top: -15px; margin-bottom: 15px;">
+                        <span id="importBtn" class="import-link" onclick="importPreviousResult()" data-zh="📥 一键导入 Stage 2 的水墨画结果" data-en="📥 Import Stage 2 Result">📥 一键导入 Stage 2 的水墨画结果</span>
+                        <input type="hidden" name="local_refine_path" id="local_refine_path">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span data-zh="原本画风保留度" data-en="Style Preservation">原本画风保留度</span>
+                            <span class="slider-val">0.75</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" name="style_preservation" min="0.10" max="0.90" step="0.05" value="0.75">
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span data-zh="自适应留白比例" data-en="Negative Space Ratio">自适应留白比例</span>
+                            <span class="slider-val">50</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" name="negative_space" min="0" max="100" step="5" value="50">
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span data-zh="徽墨色泽浓淡" data-en="Ink Density">徽墨色泽浓淡 (Density)</span>
+                            <span class="slider-val">50</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" name="ink_depth" min="0" max="100" step="5" value="50">
+                        </div>
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span data-zh="写意笔触干湿" data-en="Brush Wetness">写意笔触干湿 (Wetness)</span>
+                            <span class="slider-val">50</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" name="brush_wetness" min="0" max="100" step="5" value="50">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit" id="refineBtn" style="background-color: var(--accent-color);" data-zh="开始锁定骨架精修" data-en="Start Precise Ink Redraw">开始锁定骨架精修</button>
+                </form>
+            </section>
+        </div>
+
+        <!-- 右侧：挂轴画卷 -->
+        <div style="display: flex; flex-direction: column;">
+            <!-- 一阶段结果画卷 -->
+            <section class="card" style="height: fit-content; margin-bottom: 25px;">
+                <h2 class="card-title" data-zh="Stage 2: 风格迁移大作" data-en="Stage 2: Ink Stylization Output">Stage 2: 风格迁移大作</h2>
+                <div class="canvas-area" id="canvas_stage2">
+                    <div class="loading-ring" id="loader_stage2"></div>
+                    <p id="placeholder_stage2" data-zh="等待落墨..." data-en="Awaiting ink stroke...">等待落墨...</p>
+                    <img id="resultImg">
+                </div>
+            </section>
+
+            <!-- 二阶段精修画卷 -->
+            <section class="card" style="height: fit-content;">
+                <h2 class="card-title" data-zh="Stage 3: 锁形重绘精雕" data-en="Stage 3: Precise Redrawn Scroll">Stage 3: 锁形重绘精雕</h2>
+                <div class="canvas-area" id="canvas_stage3">
+                    <div class="loading-ring" id="loader_stage3"></div>
+                    <p id="placeholder_stage3" data-zh="等待精准磨毫..." data-en="Awaiting precise stroke...">等待精准磨毫...</p>
+                    <img id="refineImg">
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        let currentLang = 'zh';
+        let latestGeneratedUrl = ""; // 用于缓存 Stage 2 生成的本地图片路径
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            document.querySelector('.lang-btn').innerText = currentLang === 'zh' ? 'English' : '中文';
+            document.querySelectorAll('[data-zh]').forEach(el => {
+                el.innerText = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+
+        // 滑动条联动显示
+        document.querySelectorAll('input[type="range"]').forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                e.target.closest('.slider-group').querySelector('.slider-val').innerText = e.target.value;
+            });
+        });
+
+        // 图像预览
+        function setupPreview(inputId, imgId) {
+            const input = document.getElementById(inputId);
+            const img = document.getElementById(imgId);
+            input.addEventListener('change', () => {
+                if (input.files[0]) {
+                    img.src = URL.createObjectURL(input.files[0]);
+                    img.style.display = 'block';
+                    input.previousElementSibling.style.display = 'none';
+                    // 如果自主上传了图，清空一键导入的数据，防止混淆
+                    if (inputId === 'refine_img') {
+                        document.getElementById('local_refine_path').value = "";
+                    }
+                }
+            });
+        }
+        setupPreview('content_img', 'content_preview');
+        setupPreview('style_img', 'style_preview');
+        setupPreview('refine_img', 'refine_preview');
+
+        // 📥 一键导入上阶段生成的水墨图结果
+        function importPreviousResult() {
+            if (!latestGeneratedUrl) {
+                alert(currentLang === 'zh' ? "⚠️ 您还未生成过 Stage 2 的水墨画作，无法导入！" : "⚠️ No Stage 2 output detected to import!");
+                return;
+            }
+            const refinePreview = document.getElementById('refine_preview');
+            const placeholder = document.getElementById('ref_box').querySelector('span');
+
+            // 写入本地路径隐藏表单
+            document.getElementById('local_refine_path').value = latestGeneratedUrl;
+            // 预览上阶段图
+            refinePreview.src = latestGeneratedUrl;
+            refinePreview.style.display = 'block';
+            placeholder.style.display = 'none';
+            // 清理手动上传占位
+            document.getElementById('refine_img').value = "";
+
+            alert(currentLang === 'zh' ? "✅ 成功导入上阶段水墨画作为精修底图！" : "✅ Stage 2 output imported successfully!");
+        }
+
+        // ================= 请求发送 A：Stage 1 & 2 =================
+        document.getElementById('renderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const loader = document.getElementById('loader_stage2');
+            const placeholder = document.getElementById('placeholder_stage2');
+            const resultImg = document.getElementById('resultImg');
+
+            btn.disabled = true;
+            btn.innerText = currentLang === 'zh' ? '正在执行训练与特征迁移优化 (约需1-2分钟)...' : 'Optimizing and Distilling...';
+            placeholder.style.display = 'block';
+            placeholder.innerText = currentLang === 'zh' ? '后台正先训练 VAE 并进行特征演进...' : 'Tuning VAE and rendering latent space...';
+            resultImg.style.display = 'none';
+            loader.style.display = 'block';
+
+            const formData = new FormData(e.target);
+            try {
+                const response = await fetch('/transfer', { method: 'POST', body: formData });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    latestGeneratedUrl = data.result_url; // 缓存供 Stage 3 导入使用
+                    resultImg.src = data.result_url + '?t=' + new Date().getTime();
+                    resultImg.style.display = 'block';
+                    placeholder.style.display = 'none';
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (err) {
+                alert('Connection error');
+            } finally {
+                loader.style.display = 'none';
+                btn.disabled = false;
+                btn.innerText = currentLang === 'zh' ? '落笔生成水墨大作' : 'Execute Ink Rendering';
+            }
+        });
+
+        // ================= 请求发送 B：Stage 3 (精修重绘) =================
+        document.getElementById('refineForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('refineBtn');
+            const loader = document.getElementById('loader_stage3');
+            const placeholder = document.getElementById('placeholder_stage3');
+            const refineImg = document.getElementById('refineImg');
+
+            // 检查精修底图数据源
+            const refineFile = document.getElementById('refine_img').files[0];
+            const localPath = document.getElementById('local_refine_path').value;
+            if (!refineFile && !localPath) {
+                alert(currentLang === 'zh' ? "⚠️ 请先上传一张精修底图，或者一键导入 Stage 2 的结果！" : "⚠️ Please upload a base image or import the Stage 2 result first!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = currentLang === 'zh' ? '正在加载 ControlNet 精密笔墨雕琢中...' : 'Redrawing with Canny Lock...';
+            placeholder.style.display = 'none';
+            refineImg.style.display = 'none';
+            loader.style.display = 'block';
+
+            const formData = new FormData(e.target);
+            try {
+                const response = await fetch('/refine', { method: 'POST', body: formData });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    refineImg.src = data.result_url + '?t=' + new Date().getTime();
+                    refineImg.style.display = 'block';
+                } else {
+                    alert('Error: ' + data.message);
+                    placeholder.style.display = 'block';
+                }
+            } catch (err) {
+                alert('Connection error');
+                placeholder.style.display = 'block';
+            } finally {
+                loader.style.display = 'none';
+                btn.disabled = false;
+                btn.innerText = currentLang === 'zh' ? '开始锁定骨架精修' : 'Start Precise Ink Redraw';
+            }
+        });
+    </script>
+</body>
+</html>
