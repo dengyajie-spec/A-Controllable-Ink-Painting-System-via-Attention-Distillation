@@ -39,7 +39,7 @@ If you want to retrain the model, you can follow the steps below to replicate it
  </details>
 
 ## 2. Jupyer notebook
-This repository contains three Jupyter Notebooks covering the project's key procedures, enabling users to perform detection in separate steps.
+This repository contains three Jupyter Notebooks covering the project's key procedures, enabling users to perform detection in separate steps.Note that running these notebooks requires supporting external files, so please ensure all file paths are correctly configured.
 ### 2.1 Model Training​ 
 
    (1) Dataset：This project uses the open-source [StyleLLM](https://github.com/stylellm/stylellm_models) dataset, which contains excerpts from the Four Great Classical Novels of Chinese literature.
