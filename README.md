@@ -68,4 +68,5 @@ You can experience this project directly without training the model by following
    (4) Open the link in the terminal
 
    (5) ​​Visual Results ​：
-<img width="305" height="263" alt="image" src="https://github.com/user-attachments/assets/9e80cc3a-dec9-4a82-98df-a95f95144775" />
+
+   <img width="305" height="263" alt="image" src="https://github.com/user-attachments/assets/9e80cc3a-dec9-4a82-98df-a95f95144775" />
