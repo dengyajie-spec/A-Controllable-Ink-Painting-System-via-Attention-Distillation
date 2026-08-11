@@ -23,18 +23,20 @@ If you want to retrain the model, you can follow the steps below to replicate it
    (3) Project Structure：<details><summary>📁（Click to expand）  </summary>
 
 ```bash
-├── deepseek/
-├── lora_honglou/
-├── lora_sanguo/
-├── lora_shuihu/
-├── lora_xiyou/
+├── stable-diffusion-v1-5/
+├── controlnet-canny/
 ├── static/
 │   ├── css/style.css
 │   └── js/script.js
 ├── templates/index.html
 ├── app.py
-├── Test.ipynb
-└── Train.ipynb
+├── losses.py
+├── pipeline_sd.py
+├── vae_trainer.py
+├── utils.py
+├── 1.VAE Decoder Fine-Tuning.ipynb
+├── 2.Attention Distillation.ipynb
+└── 3.ControlNet with Canny Edge Detection.ipynb
 ```
  </details>
 
