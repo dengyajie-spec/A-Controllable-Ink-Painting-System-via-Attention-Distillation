@@ -18,7 +18,7 @@ If you want to retrain the model, you can follow the steps below to replicate it
 
    (1) Stable Diffusion 1.5：[Download from Hugging Face](https://huggingface.co/runwayml/stable-diffusion-v1-5)
 
-   (2) Canny：[Download from Hugging Face](https://huggingface.co/deepseek-ai/deepseek-llm-7b-base/tree/main)
+   (2) ControlNet：[Download from Hugging Face](https://huggingface.co/lllyasviel/ControlNet)
 
    (3) Project Structure：<details><summary>📁（Click to expand）  </summary>
 
