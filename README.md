@@ -9,7 +9,7 @@ If you want to retrain the model, you can follow the steps below to replicate it
 
 - Linux
 - Python 3.10
-- CUDA 12.1
+- CUDA 12.4
    ```
    pip install torch transformers datasets peft bitsandbytes flask
    ```
