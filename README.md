@@ -60,3 +60,6 @@ You can experience this project directly without training the model by following
    (5) ​​Visual Results ​：
 
    <img width="305" height="263" alt="image" src="https://github.com/user-attachments/assets/9e80cc3a-dec9-4a82-98df-a95f95144775" />
+
+   <img width="431" height="391" alt="image" src="https://github.com/user-attachments/assets/ca9e2368-dc8d-44a8-b4ff-b5c7f9504d83" />
+
