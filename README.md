@@ -38,8 +38,8 @@ If you want to retrain the model, you can follow the steps below to replicate it
 ```
  </details>
 
-## 2. Model
-If you want to train your own model with your private dataset, please follow the steps below. If you just want to run this project directly, please refer to the third part directly.
+## 2. Jupyer notebook
+This repository contains three Jupyter Notebooks covering the project's key procedures, enabling users to perform detection in separate steps.
 ### 2.1 Model Training​ 
 
    (1) Dataset：This project uses the open-source [StyleLLM](https://github.com/stylellm/stylellm_models) dataset, which contains excerpts from the Four Great Classical Novels of Chinese literature.
