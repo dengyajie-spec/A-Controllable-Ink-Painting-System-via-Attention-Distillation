@@ -40,22 +40,8 @@ If you want to retrain the model, you can follow the steps below to replicate it
 
 ## 2. Jupyer notebook
 This repository contains three Jupyter Notebooks covering the project's key procedures, enabling users to perform detection in separate steps.Note that running these notebooks requires supporting external files, so please ensure all file paths are correctly configured.
-### 2.1 Model Training​ 
 
-   (1) Dataset：This project uses the open-source [StyleLLM](https://github.com/stylellm/stylellm_models) dataset, which contains excerpts from the Four Great Classical Novels of Chinese literature.
-
-   (2) Model Training：Open Train.ipynb, make sure to modify the dataset path, then run the code to start model training.
-
-   <img width="500" height="200" alt="%EU_N`R65IXZ~A~2(NVI()I" src="https://github.com/user-attachments/assets/285182ac-0f69-4fdd-9e3f-4ea805be61d7" />
-
-
-   (3) Model Testing：Open Test.ipynb. You can enter text as needed to check whether the model is running properly.
-   
-   <img width="500" height="100" alt="7384176WJ 0K5XH@U 0 7C" src="https://github.com/user-attachments/assets/853f1109-6640-4d63-919d-fb8d6ee50e11" />
-
-   Note：You can adjust the maximum number of output characters by modifying the value of MAX_NEW_TOKENS.
-  
-## 3 Quick Start
+## 3. Quick Start
 
 You can experience this project directly without training the model by following these steps:
 
