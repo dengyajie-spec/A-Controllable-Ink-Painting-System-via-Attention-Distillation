@@ -61,6 +61,11 @@ You can experience this project directly without training the model by following
 
    <img width="431" height="391" alt="image" src="https://github.com/user-attachments/assets/ca9e2368-dc8d-44a8-b4ff-b5c7f9504d83" />
 
+   (5) ​​Comparison of Different Effects ：
+
+   <img width="370" height="501" alt="image" src="https://github.com/user-attachments/assets/d6065689-ab04-4e43-b95b-ad54bab4f7c1" />
+
+
    # References
 Canny, J. (1986). A computational approach to edge detection. IEEE Transactions on pattern analysis and machine intelligence, (6), 679-698.
 
