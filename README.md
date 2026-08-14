@@ -59,7 +59,8 @@ You can experience this project directly without training the model by following
 
    (5) ​​Visual Results ​：
 
-   <img width="431" height="391" alt="image" src="https://github.com/user-attachments/assets/ca9e2368-dc8d-44a8-b4ff-b5c7f9504d83" />
+   <img width="1024" height="1053" alt="39XQ4SG{H5D0JW$5QL5 YMN" src="https://github.com/user-attachments/assets/ed0bb5d5-0ef0-4ebf-b7a2-506a69c018d1" />
+
 
    (5) ​​Comparison of Different Effects ：
 
