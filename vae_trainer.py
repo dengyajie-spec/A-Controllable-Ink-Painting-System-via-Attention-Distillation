@@ -1,3 +1,7 @@
+### The following section is from :-
+### Zhou, Y., Gao, X., Chen, Z., & Huang, H. (2025, June). Attention distillation: A unified approach to visual characteristics transfer. In 2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) (pp. 18270-18280). IEEE.
+### https://github.com/xugao97/AttentionDistillation/blob/main/train_vae.py
+###This implementation is not a direct verbatim copy. Several system‑specific adaptations are carried out: the code architecture is refactored for embedding within the web backend pipeline, additional GPU memory management is implemented, logging output is optimised, and the logic for saving intermediate images is eliminated.
 import os
 import torch
 import torch.nn as nn
@@ -65,3 +69,4 @@ class VAETrainer:
         torch.cuda.empty_cache()
         
         return save_path
+### end of Citation
