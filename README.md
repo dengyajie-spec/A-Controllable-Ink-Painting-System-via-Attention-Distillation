@@ -16,7 +16,7 @@ If you want to retrain the model, you can follow the steps below to replicate it
   
 ### 1.2 Project Preparation
 
-   (1) Stable Diffusion 1.5：[Download from Hugging Face](https://huggingface.co/runwayml/stable-diffusion-v1-5)
+   (1) Stable Diffusion 1.5：[Download from Hugging Face](https://huggingface.co/Jiali/stable-diffusion-1.5/tree/main)
 
    (2) ControlNet：[Download from Hugging Face](https://huggingface.co/lllyasviel/ControlNet)
 
