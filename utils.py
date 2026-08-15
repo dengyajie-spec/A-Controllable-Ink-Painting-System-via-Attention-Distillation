@@ -1,3 +1,7 @@
+### The following section is from :-
+### Zhou, Y., Gao, X., Chen, Z., & Huang, H. (2025, June). Attention distillation: A unified approach to visual characteristics transfer. In 2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) (pp. 18270-18280). IEEE.
+### Available from:https://github.com/xugao97/AttentionDistillation/blob/main/utils.py
+
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -193,3 +197,4 @@ def show_image(path, title, display_height=3, title_fontsize=12):
     plt.axis('off')    
     plt.tight_layout() 
     plt.show()
+### end of Citation
