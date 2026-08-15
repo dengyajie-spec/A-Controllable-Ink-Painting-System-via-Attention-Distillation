@@ -1,3 +1,7 @@
+### The following section is from :-
+### Zhou, Y., Gao, X., Chen, Z., & Huang, H. (2025, June). Attention distillation: A unified approach to visual characteristics transfer. In 2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) (pp. 18270-18280). IEEE.
+### Available from:https://github.com/xugao97/AttentionDistillation/blob/main/pipeline_sd.py
+
 import copy
 import math
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -722,3 +726,4 @@ class ADPipeline(StableDiffusionPipeline):
                 views.append((h_start, h_end, w_start, w_end))
 
         return views
+### end of Citation
