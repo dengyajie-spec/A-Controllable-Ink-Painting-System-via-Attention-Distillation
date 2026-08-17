@@ -26,8 +26,8 @@ If you want to retrain the model, you can follow the steps below to replicate it
 ├── stable-diffusion-v1-5/
 ├── controlnet-canny/
 ├── static/
-│   ├── css/style.css
-│   └── js/script.js
+│   ├── uploads
+│   └── outputs
 ├── templates/index.html
 ├── app.py
 ├── losses.py
