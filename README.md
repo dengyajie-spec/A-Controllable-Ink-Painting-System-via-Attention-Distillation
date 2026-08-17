@@ -11,7 +11,7 @@ If you want to retrain the model, you can follow the steps below to replicate it
 - Python 3.10
 - CUDA 12.4
    ```
-   pip install torch transformers datasets peft bitsandbytes flask
+   pip install torch transformers datasets peft bitsandbytes flask opencv-python werkzeug tqdm matplotlib accelerate
    ```
   
 ### 1.2 Project Preparation
